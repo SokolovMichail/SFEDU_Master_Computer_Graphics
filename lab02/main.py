@@ -3,8 +3,8 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 from tkcolorpicker import askcolor
 from service import rgb_to_string
-from windows import Show_And_Base_Color_Picker_Window, Show_Window
-from color_correction import correction_basis_color, correction_grayscale
+from windows import Color_Picker_Window, Show_Window, ColorsHistogramWindow
+from color_correction import correction_basis_color, correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram
 
 
 class Main_Window:
@@ -17,7 +17,7 @@ class Main_Window:
         self.image = None
         self.width = 0
         self.height = 0
-        self.basis_color_for_correction = ((255, 0, 0), '#FF0000')
+        self.basis_color_for_correction = ([255, 0, 0], '#FF0000')
         self.correction_color = ((255, 0, 0), '#FF0000')
 
         self.btn_load = Button(master, text="Load Image", command=self.load)
@@ -27,16 +27,24 @@ class Main_Window:
         self.btn_show.grid(row=1, column=0)
         self.btn_show['state'] = "disabled"
 
-        self.btn_color_picker = Button(master, text="pick_color", command=self.pick_replacement_color)
+        self.btn_color_picker = Button(master, text="Pickk  Color", command=self.pick_replacement_color)
         self.btn_color_picker.grid(row=2, column=0)
 
-        self.btn_correct_color_on_basis = Button(master, text="Color_Correction_Basis",
+        self.btn_correct_color_on_basis = Button(master, text="Color Correction on Basic Color",
                                                  command=self.exec_color_correction_basic_color)
         self.btn_correct_color_on_basis.grid(row=5, column=0)
 
-        self.btn_grayscale_correction = Button(master, text="Color_Correction_Basis",
+        self.btn_grayscale_correction = Button(master, text="Grayscale Correction",
                                                command=self.exec_color_correction_grayscale)
         self.btn_grayscale_correction.grid(row=5, column=1)
+
+        self.btn_sinus_correction = Button(master, text="Sinus Correction",
+                                               command=self.exec_color_correction_sinus)
+        self.btn_sinus_correction.grid(row=5, column=2)
+
+        self.btn_normalize_histogram = Button(master, text="Normalize_Histogram",
+                                           command=self.normalize_histogram)
+        self.btn_normalize_histogram.grid(row=6, column=0)
 
         self.canvas_default = Canvas(self.master, width=20, height=20)
         self.canvas_default.create_rectangle(0, 0, 20, 20, fill="#FF0000")
@@ -60,7 +68,7 @@ class Main_Window:
         self.btn_show['state'] = "normal"
 
     def show_picture(self):
-        window = Show_And_Base_Color_Picker_Window(self, self.image, self.width, self.height)
+        window = Color_Picker_Window(self, self.image, self.width, self.height)
 
     def show_basis_color(self, r, g, b):
         self.basis_color_for_correction = ((r, g, b), rgb_to_string(r, g, b))
@@ -77,6 +85,15 @@ class Main_Window:
     def exec_color_correction_grayscale(self):
         image_corrected = correction_grayscale(self.image)
         window = Show_Window(self, image_corrected, self.width, self.height)
+
+    def exec_color_correction_sinus(self):
+        image_corrected = color_correction_sinus(self.image)
+        window = Show_Window(self, image_corrected, self.width, self.height)
+
+    def normalize_histogram(self):
+        image_normalized = normalize_histogram_2(self.image)
+        window = Show_Window(self, image_normalized, self.width, self.height)
+
 
 
 root = Tk()
