@@ -4,7 +4,8 @@ from PIL import ImageTk, Image
 from tkcolorpicker import askcolor
 from service import rgb_to_string
 from windows import Color_Picker_Window, Show_Window, ColorsHistogramWindow
-from color_correction import correction_basis_color, correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram
+from color_correction import correction_basis_color, \
+    correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram,equalize_histogram
 
 
 class Main_Window:
@@ -45,6 +46,10 @@ class Main_Window:
         self.btn_normalize_histogram = Button(master, text="Normalize_Histogram",
                                            command=self.normalize_histogram)
         self.btn_normalize_histogram.grid(row=6, column=0)
+
+        self.btn_equalize_histogram = Button(master, text="Equalize_Histogram",
+                                              command=self.equalize_histogram)
+        self.btn_equalize_histogram.grid(row=6, column=1)
 
         self.canvas_default = Canvas(self.master, width=20, height=20)
         self.canvas_default.create_rectangle(0, 0, 20, 20, fill="#FF0000")
@@ -93,6 +98,10 @@ class Main_Window:
     def normalize_histogram(self):
         image_normalized = normalize_histogram_2(self.image)
         window = Show_Window(self, image_normalized, self.width, self.height)
+
+    def equalize_histogram(self):
+        image_eq = equalize_histogram(self.image)
+        window = Show_Window(self, image_eq, self.width, self.height)
 
 
 
