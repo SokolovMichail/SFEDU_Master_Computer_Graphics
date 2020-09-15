@@ -3,7 +3,8 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 from tkcolorpicker import askcolor
 from service import rgb_to_string
-from windows import Color_Picker_Window, Show_Window, ColorsHistogramWindow
+from windows import Color_Picker_Window, Show_Window, ColorsHistogramWindow, \
+    Brighness_Correction_Advanced_Window_Line,Brightness_Correction_Advanced_Bezier
 from color_correction import correction_basis_color, \
     correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram,equalize_histogram
 
@@ -11,7 +12,7 @@ from color_correction import correction_basis_color, \
 class Main_Window:
     def __init__(self, master):
         self.master = master
-        self.master.geometry("400x300")
+        self.master.geometry("500x300")
         self.master.title("Menu")
 
         self.image_path = None
@@ -50,6 +51,14 @@ class Main_Window:
         self.btn_equalize_histogram = Button(master, text="Equalize_Histogram",
                                               command=self.equalize_histogram)
         self.btn_equalize_histogram.grid(row=6, column=1)
+
+        self.btn_brightness_correction_advance_line = Button(master, text="Advanced_brightness_Histogram",
+                                                             command=self.advanced_color_correction_line)
+        self.btn_brightness_correction_advance_line.grid(row=6, column=2)
+
+        self.btn_brightness_correction_advance_curve = Button(master, text="Advanced_brightness_Histogram_Bez",
+                                                              command=self.advanced_color_correction_bezier)
+        self.btn_brightness_correction_advance_curve.grid(row=7, column=0)
 
         self.canvas_default = Canvas(self.master, width=20, height=20)
         self.canvas_default.create_rectangle(0, 0, 20, 20, fill="#FF0000")
@@ -103,6 +112,11 @@ class Main_Window:
         image_eq = equalize_histogram(self.image)
         window = Show_Window(self, image_eq, self.width, self.height)
 
+    def advanced_color_correction_line(self):
+        window = Brighness_Correction_Advanced_Window_Line(self, self.image, self.width, self.height)
+
+    def advanced_color_correction_bezier(self):
+        window = Brightness_Correction_Advanced_Bezier(self, self.image, self.width, self.height)
 
 
 root = Tk()

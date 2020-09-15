@@ -2,6 +2,7 @@ from PIL import Image
 import numpy as np
 from math import sin,cos,tan
 from service import permutate_array_2
+from sklearn.preprocessing import normalize
 
 def correction_basis_color(image, basis_color, replacement_color):
     for i in range(3):
@@ -75,25 +76,27 @@ def equalize_histogram(image):
     r_normed = permutate_array_2(np.unique(r,return_counts=True))
     g_normed = permutate_array_2(np.unique(g,return_counts=True))
     b_normed = permutate_array_2(np.unique(b,return_counts=True))
-    r_normed = r_normed / 2#55
-    b_normed = b_normed / 2#55
-    g_normed = g_normed / 2#55
-    shr = np.roll(r_normed,1)
-    shr[0] = 0
-    r_normed = r_normed + shr
-    shg = np.roll(g_normed,1)
-    shg[0] = 0
-    g_normed = g_normed + shg
-    shb = np.roll(b_normed,1)
-    shr[0] = 0
-    b_normed = b_normed + shb
+    r_normed = r_normed / pixel_amount
+    g_normed = g_normed / pixel_amount
+    b_normed = b_normed / pixel_amount
+    for i in range(1,256):
+        r_normed[i] += r_normed[i - 1]
+        g_normed[i] += g_normed[i - 1]
+        b_normed[i] += b_normed[i - 1]
+    r_normed *= 255
+    g_normed *= 255
+    b_normed *= 255
     image_new = np.copy(image_bin)
     for i in range(image_new.shape[0]):
         for j in  range(image_new.shape[1]):
-            image_new[i,j,0] = r_normed[image_new[i,j,0]]
+            image_new[i, j, 0] = r_normed[image_new[i, j, 0]]
             image_new[i, j, 1] = g_normed[image_new[i, j, 1]]
             image_new[i, j, 2] = b_normed[image_new[i, j, 2]]
     #res = np.clip((image_bin-min_v)*(255/max(1,max_v-min_v)),0,255)
     return Image.fromarray(image_new.astype('uint8'), 'RGB')
 
+def brightness_prep(image):
+    image_bin = np.array(image)[:, :, :3]
+    image_new = image_bin / 255.0
+    return image_new
 
