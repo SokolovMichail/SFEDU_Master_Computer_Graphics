@@ -5,15 +5,21 @@ from service import permutate_array_2
 from sklearn.preprocessing import normalize
 
 def correction_basis_color(image, basis_color, replacement_color):
+    basis_color_new = [basis_color[0][0],basis_color[0][1],basis_color[0][2]]
+    repl_color_new = [replacement_color[0][0], replacement_color[0][1], replacement_color[0][2]]
     for i in range(3):
-        if basis_color[0][i] == 0:
-            basis_color[i] = 1
-    coef_r = (replacement_color[0][0] / (basis_color[0][0] * 1.0))
-    coef_g = (replacement_color[0][1] / (basis_color[0][1] * 1.0))
-    coef_b = (replacement_color[0][2] / (basis_color[0][2] * 1.0))
+        if basis_color_new[i] == 0:
+            basis_color_new[i] = (np.finfo(float).eps)
+    coef_r = (repl_color_new[0] / (basis_color_new[0] * 1.0))
+    coef_g = (repl_color_new[1] / (basis_color_new[1] * 1.0))
+    coef_b = (repl_color_new[2] / (basis_color_new[2] * 1.0))
     coefs = (coef_r, coef_g, coef_b)
-    image_bin = np.array(image)[:, :, :3]
-    res = np.clip(np.multiply(image_bin, coefs), 0, 255)
+    image_bin = np.array(image.convert('RGB'))
+    res = np.clip(np.multiply(image_bin, coefs),0,255)
+    #maxes_1 = np.max(res,axis=1)
+    #maxes = np.max(maxes_1,axis=0)
+    #res = np.divide(res,maxes)
+    #res *= 255
     return Image.fromarray(res.astype('uint8'), 'RGB')
 
 
@@ -37,6 +43,13 @@ def color_correction_sinus(image):
     res = (1+np.sin((image_new)))/2.
     res *= 255
     res = res.astype(int)
+    return Image.fromarray(res.astype('uint8'), 'RGB')
+
+def color_correction_square(image):
+    image_bin = np.array(image)[:, :, :3]
+    image_new = image_bin / 255.0
+    res = np.square(image_new)
+    res *= 255
     return Image.fromarray(res.astype('uint8'), 'RGB')
 
 def normalize_histogram(image):

@@ -6,13 +6,13 @@ from service import rgb_to_string
 from windows import Color_Picker_Window, Show_Window, ColorsHistogramWindow, \
     Brighness_Correction_Advanced_Window_Line,Brightness_Correction_Advanced_Bezier
 from color_correction import correction_basis_color, \
-    correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram,equalize_histogram
+    correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram,equalize_histogram,color_correction_square
 
 
 class Main_Window:
     def __init__(self, master):
         self.master = master
-        self.master.geometry("500x300")
+        self.master.geometry("600x300")
         self.master.title("Menu")
 
         self.image_path = None
@@ -43,6 +43,10 @@ class Main_Window:
         self.btn_sinus_correction = Button(master, text="Sinus Correction",
                                                command=self.exec_color_correction_sinus)
         self.btn_sinus_correction.grid(row=5, column=2)
+
+        self.btn_sqr_correction = Button(master, text="Square Correction",
+                                           command=self.exec_color_correction_sqr)
+        self.btn_sqr_correction.grid(row=7, column=1)
 
         self.btn_normalize_histogram = Button(master, text="Normalize_Histogram",
                                            command=self.normalize_histogram)
@@ -102,6 +106,10 @@ class Main_Window:
 
     def exec_color_correction_sinus(self):
         image_corrected = color_correction_sinus(self.image)
+        window = Show_Window(self, image_corrected, self.width, self.height)
+
+    def exec_color_correction_sqr(self):
+        image_corrected = color_correction_square(self.image)
         window = Show_Window(self, image_corrected, self.width, self.height)
 
     def normalize_histogram(self):
