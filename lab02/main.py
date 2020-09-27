@@ -6,7 +6,7 @@ from service import rgb_to_string
 from windows import Color_Picker_Window, Show_Window, ColorsHistogramWindow, \
     Brighness_Correction_Advanced_Window_Line,Brightness_Correction_Advanced_Bezier
 from color_correction import correction_basis_color, \
-    correction_grayscale,color_correction_sinus,normalize_histogram_2,normalize_histogram,equalize_histogram,color_correction_square
+    correction_grayscale,color_correction_sqr,normalize_histogram_2,normalize_histogram,equalize_histogram,color_correction_square
 
 
 class Main_Window:
@@ -40,8 +40,8 @@ class Main_Window:
                                                command=self.exec_color_correction_grayscale)
         self.btn_grayscale_correction.grid(row=5, column=1)
 
-        self.btn_sinus_correction = Button(master, text="Sinus Correction",
-                                               command=self.exec_color_correction_sinus)
+        self.btn_sinus_correction = Button(master, text="Sqrt Correction",
+                                           command=self.exec_color_correction_sqrt)
         self.btn_sinus_correction.grid(row=5, column=2)
 
         self.btn_sqr_correction = Button(master, text="Square Correction",
@@ -104,8 +104,8 @@ class Main_Window:
         image_corrected = correction_grayscale(self.image)
         window = Show_Window(self, image_corrected, self.width, self.height)
 
-    def exec_color_correction_sinus(self):
-        image_corrected = color_correction_sinus(self.image)
+    def exec_color_correction_sqrt(self):
+        image_corrected = color_correction_sqr(self.image)
         window = Show_Window(self, image_corrected, self.width, self.height)
 
     def exec_color_correction_sqr(self):

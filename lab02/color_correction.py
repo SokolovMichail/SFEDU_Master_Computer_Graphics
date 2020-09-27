@@ -37,10 +37,10 @@ def correction_grayscale(image):
 def normalize_sinus(x):
     return abs(1-x)
 
-def color_correction_sinus(image):
+def color_correction_sqr(image):
     image_bin = np.array(image)[:, :, :3]
     image_new = image_bin / 255.0
-    res = (1+np.sin((image_new)))/2.
+    res = np.sqrt(image_new)
     res *= 255
     res = res.astype(int)
     return Image.fromarray(res.astype('uint8'), 'RGB')

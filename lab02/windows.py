@@ -111,7 +111,10 @@ class Brighness_Correction_Advanced_Window_Line:
         image = brightness_prep(self.image)
         image_new = self.interpolate(image)
         image_new *= 255
-        image_fin = ImagePIL.fromarray(image_new.astype('uint8'), 'RGB')
+        #image_new = np.clip(image_new,0,255)
+        image_new_max = np.max(image_new)
+        image_to_uint8 = image_new.astype('uint8')
+        image_fin = ImagePIL.fromarray(image_to_uint8, 'RGB')
         show_window = Show_Window(self.master.master, image_fin, self.width, self.height)
 
 
@@ -152,7 +155,9 @@ class Brightness_Correction_Advanced_Bezier(Brighness_Correction_Advanced_Window
     def correct(self):
         image_bin = np.array(self.image)[:, :, :3]
         image_new = self.interpolate(image_bin)
-        image_fin = ImagePIL.fromarray(image_new.astype('uint8'), 'RGB')
+        image_new_max = np.max(image_new)
+        image_to_uint8 = image_new.astype('uint8')
+        image_fin = ImagePIL.fromarray(image_to_uint8, 'RGB')
         show_window = Show_Window(self.master.master, image_fin, self.width, self.height)
 
     def draw_function(self):
