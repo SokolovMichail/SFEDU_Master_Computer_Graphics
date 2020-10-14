@@ -1,0 +1,1 @@
+start /d "D:\SFEDU Master's degree\1 Semester\SFEDU_Master_Computer_Graphics"
