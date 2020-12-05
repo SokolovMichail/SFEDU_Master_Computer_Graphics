@@ -2,4 +2,5 @@
 __pycache__
 .ipynb_checkpoints/lab4-checkpoint.ipynb
 lab03/.ipynb_checkpoints/lab3-checkpoint.ipynb
-lab06/.ipynb_checkpoints/lab06-checkpoint.ipynb
+.ipynb_checkpoints
+
